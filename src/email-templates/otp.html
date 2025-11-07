@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akadero OTP Verification</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f8f8fa;
+        margin: 0;
+        padding: 0;
+        color: #1a1724;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #eeeeee;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: #cc0000;
+        color: #ffffff;
+        text-align: center;
+        padding: 25px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .content {
+        padding: 30px;
+        text-align: center;
+      }
+
+      .content h2 {
+        color: #1a1724;
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+
+      .content p {
+        color: #444;
+        font-size: 15px;
+        line-height: 24px;
+        margin: 8px 0;
+      }
+
+      .otp-box {
+        background-color: #fff4f4;
+        display: inline-block;
+        padding: 18px 28px;
+        border-radius: 12px;
+        border: 2px dashed #cc0000;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 8px;
+        color: #cc0000;
+        margin: 25px 0;
+      }
+
+      .footer {
+        background-color: #1a1724;
+        color: #ffffff;
+        text-align: center;
+        padding: 18px;
+        font-size: 13px;
+      }
+
+      .footer a {
+        color: #cc0000;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>Akadero Verification Code</h1>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <h2>Let’s verify your account</h2>
+        <p>
+          Use the OTP code below to complete your signup on
+          <strong>Akadero</strong>. This code will expire in 60 seconds.
+        </p>
+
+        <div class="otp-box">{{otp}}</div>
+
+        <p>
+          This code is linked to your email:
+          <a
+            href="mailto:{{email}}"
+            style="color: #cc0000; text-decoration: none"
+            >{{email}}</a
+          >
+        </p>
+
+        <p style="font-size: 13px; color: #777; margin-top: 15px">
+          If you didn’t request this verification, please ignore this message.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>
+          © 2025 <b>Akadero</b>. All rights reserved.<br />
+          Visit us at
+          <a href="https://akadero.vercel.app" target="_blank">akadero.com</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
