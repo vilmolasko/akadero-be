@@ -30,7 +30,8 @@ const contactUs = async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.SENDING_EMAIL,
-      to: process.env.SENDING_EMAIL,
+      // to: process.env.SENDING_EMAIL,
+      to: "mohsindawood58@gmail.com",
       subject: `Nauja žinutė iš kontaktų formos nuo ${name}`,
 
       html: htmlContent,
