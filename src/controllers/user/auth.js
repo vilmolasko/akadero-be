@@ -34,6 +34,7 @@ const signUp = async (req, res) => {
       otp,
       role,
       status,
+      lastOtpSentAt: new Date(),
     });
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -99,38 +100,70 @@ const signUp = async (req, res) => {
   }
 };
 /*  Log in an existing user (Sign In) */
+
 const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // ✅ Find user with password field
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User Not Found" });
+      return res.status(404).json({
+        success: false,
+        message: "User Not Found",
+      });
     }
 
     if (!user.password) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User Password Not Found" });
+      return res.status(404).json({
+        success: false,
+        message: "User Password Not Found",
+      });
     }
 
+    // ✅ Compare password
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect Password" });
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect Password",
+      });
     }
 
+    // ✅ If user is NOT verified → send OTP and stop login
+    if (!user.isVerified) {
+      const otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+        digits: true,
+      });
+
+      await User.findOneAndUpdate(
+        { email: user.email },
+        {
+          otp,
+          lastOtpSentAt: new Date(),
+        }
+      );
+
+      return res.status(403).json({
+        success: false,
+        message: "Your email is not verified. OTP sent again.",
+        otpSent: true,
+      });
+    }
+
+    // ✅ User verified → proceed with login
     const token = jwt.sign(
       { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       message: "Login Successfully",
       token,
@@ -151,7 +184,10 @@ const signIn = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(400).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
@@ -281,6 +317,16 @@ const verifyOtp = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "OTP Has Already Been Verified" });
+    }
+    const now = Date.now();
+    const sentAt = new Date(user.lastOtpSentAt).getTime();
+
+    const diff = now - sentAt;
+
+    if (diff > 5 * 60 * 1000) {
+      return res
+        .status(400)
+        .json({ message: "OTP expired. Please request a new one." });
     }
 
     if (otp === user.otp) {

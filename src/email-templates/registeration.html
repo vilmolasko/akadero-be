@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nauja užklausa - Akadero</title>
+    <title>Nauja Registracija – Akadero</title>
     <style>
       body {
         font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -86,25 +86,27 @@
   <body>
     <div class="container">
       <div class="header">
-        <h1>Akadero užklausos pranešimas</h1>
+        <h1>Nauja Registracija – Akadero</h1>
       </div>
 
       <div class="content">
-        <h2>Nauja užklausa dėl {{courseName}}</h2>
+        <h2>Nauja Organizatoriaus Registracija</h2>
         <p>
-          Gavote naują užklausą apie savo kursą platformoje <b>Akadero</b>.
-          Žemiau pateikiama informacija:
+          Naujas organizatorius ką tik užsiregistravo platformoje <b>Akadero</b>.
+          Žemiau pateikiama registracijos informacija:
         </p>
 
         <div class="info-box">
-          <p><b>Vardas:</b> {{firstName}} {{lastName}}</p>
+          <p><b>Pasirinktas planas:</b> {{plan}}</p>
           <p><b>El. paštas:</b> {{email}}</p>
+          <p><b>Įmonė:</b> {{company}}</p>
           <p><b>Telefonas:</b> {{phone}}</p>
-          <p><b>Klausimas:</b> {{question}}</p>
+          <p><b>Aprašymas:</b> {{description}}</p>
         </div>
 
         <p>
-          Prašome peržiūrėti šią užklausą ir netrukus susisiekti su studentu.
+          Prašome peržiūrėti registracijos duomenis ir, jei reikia,
+          susisiekti su organizatoriumi.
         </p>
       </div>
 

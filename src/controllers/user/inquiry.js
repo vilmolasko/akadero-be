@@ -103,7 +103,8 @@ const createOrganizerInquiry = async (req, res) => {
     await transporter.sendMail({
       from: process.env.SENDING_EMAIL,
       to: organizer.email,
-      subject: `New Inquiry for ${organizer.name}`,
+      subject: `Nauja užklausa dėl ${organizer.name}`,
+
       html: htmlContent,
     });
 

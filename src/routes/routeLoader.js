@@ -31,6 +31,9 @@ const userOrganizerRoutes = require("./user/organizer");
 const userStudentRoutes = require("./user/student");
 const userInquiryRoutes = require("./user/inquiry");
 const userHomeRoutes = require("./user/home");
+const registerationRoutes = require("./user/registeration");
+const contactUsRoutes = require("./user/contact-us");
+
 const featuredOrganizerRoutes = require("./organizer/featured");
 const featuredAdminRoutes = require("./admin/featured");
 const studentOrganizerRoutes = require("./organizer/student");
@@ -72,5 +75,7 @@ router.use("/api", userInquiryRoutes);
 router.use("/api", userHomeRoutes);
 router.use("/api", featuredOrganizerRoutes);
 router.use("/api", featuredAdminRoutes);
+router.use("/api", registerationRoutes);
+router.use("/api", contactUsRoutes);
 
 module.exports = router;
