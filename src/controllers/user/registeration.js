@@ -1,6 +1,7 @@
 // const nodemailer = require("nodemailer");
 const path = require("path");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 
 /*  Create Inquiry and Send Email to Organizer */
 const createRegistration = async (req, res) => {
@@ -31,8 +32,7 @@ const createRegistration = async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.SENDING_EMAIL,
-      to: "mohsindawood58@gmail.com",
-      // to: process.env.SENDING_EMAIL,
+      to: process.env.SENDING_EMAIL,
       subject: `New Registeration for ${company}`,
       html: htmlContent,
     });

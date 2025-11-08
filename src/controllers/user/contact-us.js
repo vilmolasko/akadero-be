@@ -5,18 +5,19 @@ const fs = require("fs");
 /*  Create Inquiry and Send Email to Organizer */
 const contactUs = async (req, res) => {
   try {
-    const { email, name, description, phone } = req.body;
+    const { email, name, message, phone } = req.body;
 
     const htmlFilePath = path.join(
       process.cwd(),
       "src/email-templates",
       "contact-us.html"
     );
+
     let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
     htmlContent = htmlContent
       .replace(/{{email}}/g, email)
       .replace(/{{name}}/g, name)
-      .replace(/{{description}}/g, description)
+      .replace(/{{message}}/g, message)
       .replace(/{{phone}}/g, phone);
     let transporter = nodemailer.createTransport({
       host: process.env.SMTP_SERVER,
@@ -27,15 +28,13 @@ const contactUs = async (req, res) => {
         pass: process.env.SMTP_PASSWORD,
       },
     });
-
-    await transporter.sendMail({
-      from: process.env.SENDING_EMAIL,
-      // to: process.env.SENDING_EMAIL,
-      to: "mohsindawood58@gmail.com",
-      subject: `Nauja žinutė iš kontaktų formos nuo ${name}`,
-
-      html: htmlContent,
-    });
+    to: process.env.SENDING_EMAIL,
+      await transporter.sendMail({
+        from: process.env.SENDING_EMAIL,
+        to: process.env.SENDING_EMAIL,
+        subject: `Nauja žinutė iš kontaktų formos nuo ${name}`,
+        html: htmlContent,
+      });
 
     return res.status(201).json({
       success: true,
