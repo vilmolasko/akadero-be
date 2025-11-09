@@ -15,7 +15,7 @@ const getDashboardAnalyticsByOrganizer = async (req, res) => {
     const courses = await Course.find({
       organizer: oid,
       createdAt: { $gte: startDate, $lte: now },
-    }).populate("organizer", "name email cover");
+    }).populate("organizer", "name email cover price schedules status");
 
     // 2️⃣ Total students
     const totalStudents = courses.reduce(
