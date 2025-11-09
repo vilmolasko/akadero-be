@@ -5,12 +5,7 @@ const verifyToken = require("../../middlewares/jwt");
 const { getOrganizer } = require("../../middlewares/getOrganizer");
 
 /*  Create Organizer (by Organizer user) */
-router.post(
-  "/organizer/profile",
-  verifyToken,
-  getOrganizer,
-  Organizer.createOrganizer
-);
+router.post("/organizer/profile", verifyToken, Organizer.createOrganizer);
 
 /*  Get Single Organizer by ID */
 router.get(

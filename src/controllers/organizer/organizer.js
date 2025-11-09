@@ -8,7 +8,7 @@ const createOrganizer = async (req, res) => {
 
     // Check if this organizer already created profile
     const existingOrganizer = await Organizer.findOne({
-      organizer: req.organizer._id,
+      organizer: req.user._id,
     });
 
     if (existingOrganizer) {
