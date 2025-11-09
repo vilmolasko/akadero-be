@@ -5,8 +5,6 @@ const Course = require("../../models/Course");
 const createOrganizer = async (req, res) => {
   try {
     const { logo, cover, ...others } = req.body;
-
-    // Check if this organizer already created profile
     const existingOrganizer = await Organizer.findOne({
       organizer: req.user._id,
     });
