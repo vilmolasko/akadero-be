@@ -63,21 +63,28 @@ const getDashboardAnalyticsByOrganizer = async (req, res) => {
       course: { $in: courseIds },
     });
 
-    // 5️⃣ Build lineChart data
+    // 5️⃣ Build lineChart data with income
     const dateCounts = {};
     for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
-      dateCounts[d.toISOString().split("T")[0]] = { courses: 0, organizers: 0 };
+      dateCounts[d.toISOString().split("T")[0]] = {
+        courses: 0,
+        organizers: 0,
+        income: 0,
+      };
     }
 
     courses.forEach((course) => {
       const dateKey = course.createdAt.toISOString().split("T")[0];
       if (dateCounts[dateKey]) {
         dateCounts[dateKey].courses += 1;
+
         const totalStudentsInCourse = (course.schedules || []).reduce(
           (s, sch) => s + (sch.students || []).length,
           0
         );
+
         dateCounts[dateKey].organizers += totalStudentsInCourse;
+        dateCounts[dateKey].income += totalStudentsInCourse * course.price;
       }
     });
 
@@ -85,6 +92,7 @@ const getDashboardAnalyticsByOrganizer = async (req, res) => {
       date,
       courses: data.courses,
       organizers: data.organizers,
+      income: data.income,
     }));
 
     // ✅ Format Response
