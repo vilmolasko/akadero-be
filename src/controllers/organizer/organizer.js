@@ -5,8 +5,9 @@ const Course = require("../../models/Course");
 const createOrganizer = async (req, res) => {
   try {
     const { logo, cover, ...others } = req.body;
+
     const existingOrganizer = await Organizer.findOne({
-      organizer: req.user._id,
+      organizer: req.user._id.toString(),
     });
 
     if (existingOrganizer) {
