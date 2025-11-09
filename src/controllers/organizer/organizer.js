@@ -18,7 +18,7 @@ const createOrganizer = async (req, res) => {
     }
 
     const newOrganizer = await Organizer.create({
-      organizer: req.organizer._id,
+      organizer: req.user._id.toString(),
       logo,
       cover,
       ...others,
