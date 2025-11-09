@@ -21,9 +21,7 @@ const createRegistration = async (req, res) => {
       .replace(/{{description}}/g, description)
       .replace(/{{phone}}/g, phone);
     let transporter = nodemailer.createTransport({
-      host: process.env.SMTP_SERVER,
-      port: Number(process.env.SMTP_PORT),
-      secure: Boolean(process.env.SMTP_SECURE),
+      service: process.env.SMTP_SERVICE,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
