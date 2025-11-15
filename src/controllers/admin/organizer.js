@@ -42,12 +42,7 @@ const toggleOrganizerApproval = async (req, res) => {
         .json({ success: false, message: "Organizer not found" });
     }
 
-    user.status =
-      user.status === "pending"
-        ? "approved"
-        : user.status === "approved"
-        ? "rejected"
-        : "approved";
+    user.status = user.status === "approved" ? "rejected" : "approved";
     await user.save();
 
     return res.status(200).json({

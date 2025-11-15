@@ -131,8 +131,8 @@ const courseSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["published", "pending",  "completed", "canceled"],
-      default: "pending",
+      enum: ["published", "pending", "completed", "canceled"],
+      default: "published",
     },
   },
   { timestamps: true }

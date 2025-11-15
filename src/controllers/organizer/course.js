@@ -30,7 +30,6 @@ const createCourseByOrganizer = async (req, res) => {
       })),
       organizer: organizerId,
       slug,
-      status: "pending",
     });
 
     res.status(201).json({

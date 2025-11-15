@@ -76,8 +76,8 @@ const signUp = async (req, res) => {
       await transporter.sendMail({
         from: process.env.SENDING_EMAIL,
         to: process.env.SENDING_EMAIL,
-        subject: "New Organizer Registration Pending Approval",
-        html: `<p>A new organizer <b>${user.firstName} ${user.lastName}</b> has signed up and is awaiting approval.</p>`,
+        subject: "New Organizer Registration",
+        html: `<p>A new organizer <b>${user.firstName} ${user.lastName}</b> has signed up.</p>`,
       });
     }
     res.status(201).json({
@@ -85,7 +85,7 @@ const signUp = async (req, res) => {
       message:
         role === "admin"
           ? "Admin account created successfully."
-          : "Organizer account created successfully and awaiting admin approval.",
+          : "Organizer account created successfully.",
       otp,
       token,
       user,

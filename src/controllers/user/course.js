@@ -92,7 +92,7 @@ const getCourses = async (req, res) => {
       ])
       .populate("category", "name slug")
       .populate("subCategory", "name slug")
-      .sort({ createdAt: -1 })
+      .sort({ isFeatured: -1 })
       .skip(skip * (parseInt(page) - 1 || 0))
       .limit(skip);
 
