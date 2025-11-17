@@ -15,22 +15,21 @@ const SubCategorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required."],
-      maxlength: [100, "Name cannot exceed 100 characters."],
+      maxlength: [60, "Name cannot exceed 100 characters."],
     },
     metaTitle: {
       type: String,
       required: [true, "Meta Title is required."],
-      maxlength: [100, "Meta Title cannot exceed 100 characters."],
+      maxlength: [60, "Meta Title cannot exceed 60 characters."],
     },
     description: {
       type: String,
       required: [true, "Description is required."],
-      maxlength: [500, "Description cannot exceed 500 characters."],
     },
     metaDescription: {
       type: String,
       required: [true, "Meta Description is required."],
-      maxlength: [200, "Meta Description cannot exceed 200 characters."],
+      maxlength: [160, "Meta Description cannot exceed 160 characters."],
     },
     slug: {
       type: String,

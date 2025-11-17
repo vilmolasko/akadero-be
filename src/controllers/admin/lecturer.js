@@ -100,7 +100,6 @@ const deleteLecturerByAdmin = async (req, res) => {
 
     const lecturer = await Lecturer.findOneAndDelete({
       _id: id,
-      organizer: req.admin._id.toString(),
     });
 
     if (!lecturer)

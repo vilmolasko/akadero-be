@@ -30,12 +30,12 @@ const OrganizerSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required."],
-      maxlength: [100, "Name cannot exceed 100 characters."],
+      maxlength: [60, "Name cannot exceed 100 characters."],
     },
     slug: {
       type: String,
       required: [true, "Slug is required."],
-      maxlength: [100, "Slug cannot exceed 100 characters."],
+      maxlength: [60, "Slug cannot exceed 100 characters."],
     },
     email: {
       type: String,

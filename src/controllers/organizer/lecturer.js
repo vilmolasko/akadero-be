@@ -99,11 +99,8 @@ const updateLecturerByOrganizer = async (req, res) => {
 const deleteLecturerByOrganizer = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const lecturer = await Lecturer.findOneAndDelete({
-      _id: id,
-      organizer: req.organizer._id.toString(),
-    });
+    console.log(id, "id");
+    const lecturer = await Lecturer.findByIdAndDelete(id);
 
     if (!lecturer)
       return res

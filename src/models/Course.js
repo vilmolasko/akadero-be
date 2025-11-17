@@ -37,6 +37,7 @@ const courseSchema = new mongoose.Schema(
     metaTitle: {
       type: String,
       required: true,
+      maxlength: [60, "Meta title cannot exceed 60 characters."],
     },
 
     price: {
