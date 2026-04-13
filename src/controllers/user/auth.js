@@ -1,10 +1,10 @@
-const User = require("../../models/User");
-const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const bcrypt = require("bcrypt");
-const otpGenerator = require("otp-generator");
-const fs = require("fs");
-const path = require("path");
+const User = require('../../models/User');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+const otpGenerator = require('otp-generator');
+const fs = require('fs');
+const path = require('path');
 
 /*  Register a new user (Sign Up) */
 const signUp = async (req, res) => {
@@ -17,7 +17,7 @@ const signUp = async (req, res) => {
       return res.status(400).json({
         UserCount,
         success: false,
-        message: "User With This Email Already Exists",
+        message: 'User With This Email Already Exists',
       });
     }
     const otp = otpGenerator.generate(6, {
@@ -26,8 +26,8 @@ const signUp = async (req, res) => {
       lowerCaseAlphabets: false,
       digits: true,
     });
-    const role = UserCount === 0 ? "admin" : "organizer";
-    const status = UserCount === 0 ? "active" : "active";
+    const role = UserCount === 0 ? 'admin' : 'organizer';
+    const status = UserCount === 0 ? 'active' : 'active';
 
     const user = await User.create({
       ...request,
@@ -38,16 +38,16 @@ const signUp = async (req, res) => {
     });
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: '7d',
     });
-    if (role !== "admin") {
+    if (role !== 'admin') {
       //  Send OTP email
       const htmlFilePath = path.join(
         process.cwd(),
-        "src/email-templates",
-        "otp.html"
+        'src/email-templates',
+        'otp.html'
       );
-      let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+      let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
 
       // ✅ Replace {{otp}} and {{email}} placeholders
       htmlContent = htmlContent
@@ -65,7 +65,7 @@ const signUp = async (req, res) => {
       let mailOptions = {
         from: process.env.SENDING_EMAIL,
         to: user.email,
-        subject: "Verify your email",
+        subject: 'Verify your email',
         html: htmlContent,
       };
 
@@ -76,16 +76,16 @@ const signUp = async (req, res) => {
       await transporter.sendMail({
         from: process.env.SENDING_EMAIL,
         to: process.env.SENDING_EMAIL,
-        subject: "New Organizer Registration",
+        subject: 'New Organizer Registration',
         html: `<p>A new organizer <b>${user.firstName} ${user.lastName}</b> has signed up.</p>`,
       });
     }
     res.status(201).json({
       success: true,
       message:
-        role === "admin"
-          ? "Admin account created successfully."
-          : "Organizer account created successfully.",
+        role === 'admin'
+          ? 'Admin account created successfully.'
+          : 'Organizer account created successfully.',
       otp,
       token,
       user,
@@ -104,19 +104,19 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     // ✅ Find user with password field
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User Not Found",
+        message: 'User Not Found',
       });
     }
 
     if (!user.password) {
       return res.status(404).json({
         success: false,
-        message: "User Password Not Found",
+        message: 'User Password Not Found',
       });
     }
 
@@ -126,7 +126,7 @@ const signIn = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(400).json({
         success: false,
-        message: "Incorrect Password",
+        message: 'Incorrect Password',
       });
     }
 
@@ -149,7 +149,7 @@ const signIn = async (req, res) => {
 
       return res.status(403).json({
         success: false,
-        message: "Your email is not verified. OTP sent again.",
+        message: 'Your email is not verified. OTP sent again.',
         otpSent: true,
       });
     }
@@ -158,12 +158,12 @@ const signIn = async (req, res) => {
     const token = jwt.sign(
       { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: '7d' }
     );
 
     return res.status(200).json({
       success: true,
-      message: "Login Successfully",
+      message: 'Login Successfully',
       token,
       user: {
         _id: user._id,
@@ -198,19 +198,19 @@ const forgetPassword = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User Not Found" });
+        .json({ success: false, message: 'User Not Found' });
     }
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: '7d',
     });
     const resetPasswordLink = `${request.origin}/auth/reset-password/${token}`;
     const htmlFilePath = path.join(
       process.cwd(),
-      "src/email-templates",
-      "forget.html"
+      'src/email-templates',
+      'forget.html'
     );
-    let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
     htmlContent = htmlContent.replace(
       /href="javascript:void\(0\);"/g,
       `href="${resetPasswordLink}"`
@@ -227,7 +227,7 @@ const forgetPassword = async (req, res) => {
     let mailOptions = {
       from: process.env.SENDING_EMAIL,
       to: user.email,
-      subject: "Verify your email",
+      subject: 'Verify your email',
       html: htmlContent,
     };
 
@@ -235,7 +235,7 @@ const forgetPassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Forgot Password Email Sent Successfully.",
+      message: 'Forgot Password Email Sent Successfully.',
       token,
     });
   } catch (error) {
@@ -254,23 +254,23 @@ const resetPassword = async (req, res) => {
     } catch (err) {
       return res.status(400).json({
         success: false,
-        message: "Invalid Or Expired Token. Please Request A New One.",
+        message: 'Invalid Or Expired Token. Please Request A New One.',
         err: err.message,
       });
     }
 
-    const user = await User.findById(decoded._id).select("password");
+    const user = await User.findById(decoded._id).select('password');
 
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User Not Found" });
+        .json({ success: false, message: 'User Not Found' });
     }
     if (!newPassword || !user.password) {
       return res.status(400).json({
         success: false,
         message:
-          "Invalid Data. Both NewPassword And User Password Are Required.",
+          'Invalid Data. Both NewPassword And User Password Are Required.',
       });
     }
 
@@ -278,7 +278,7 @@ const resetPassword = async (req, res) => {
     if (isSamePassword) {
       return res.status(400).json({
         success: false,
-        message: "New Password Must Be Different From The Old Password.",
+        message: 'New Password Must Be Different From The Old Password.',
       });
     }
 
@@ -287,7 +287,7 @@ const resetPassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Password Updated Successfully.",
+      message: 'Password Updated Successfully.',
       user,
     });
   } catch (error) {
@@ -306,13 +306,13 @@ const verifyOtp = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User Not Found" });
+        .json({ success: false, message: 'User Not Found' });
     }
 
     if (user.isVerified) {
       return res
         .status(400)
-        .json({ success: false, message: "OTP Has Already Been Verified" });
+        .json({ success: false, message: 'OTP Has Already Been Verified' });
     }
     const now = Date.now();
     const sentAt = new Date(user.lastOtpSentAt).getTime();
@@ -322,7 +322,7 @@ const verifyOtp = async (req, res) => {
     if (diff > 5 * 60 * 1000) {
       return res
         .status(400)
-        .json({ message: "OTP expired. Please request a new one." });
+        .json({ message: 'OTP expired. Please request a new one.' });
     }
 
     if (otp === user.otp) {
@@ -330,9 +330,9 @@ const verifyOtp = async (req, res) => {
       await user.save();
       return res
         .status(200)
-        .json({ success: true, message: "OTP Verified Successfully" });
+        .json({ success: true, message: 'OTP Verified Successfully' });
     } else {
-      return res.status(400).json({ success: false, message: "Invalid OTP" });
+      return res.status(400).json({ success: false, message: 'Invalid OTP' });
     }
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message });
@@ -350,7 +350,7 @@ const resendOtp = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User Not Found or Already Verified",
+        message: 'User Not Found or Already Verified',
       });
     }
 
@@ -364,10 +364,10 @@ const resendOtp = async (req, res) => {
 
     const htmlFilePath = path.join(
       process.cwd(),
-      "src/email-templates",
-      "otp.html"
+      'src/email-templates',
+      'otp.html'
     );
-    let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
     htmlContent = htmlContent.replace(/<h1>[\s\d]*<\/h1>/g, `<h1>${otp}</h1>`);
     htmlContent = htmlContent.replace(/usingyourmail@gmail\.com/g, user.email);
 
@@ -382,14 +382,14 @@ const resendOtp = async (req, res) => {
     let mailOptions = {
       from: process.env.SENDING_EMAIL,
       to: user.email,
-      subject: "Verify your email",
+      subject: 'Verify your email',
       html: htmlContent,
     };
 
     await transporter.sendMail(mailOptions);
     return res.status(200).json({
       success: true,
-      message: "OTP Resent Successfully",
+      message: 'OTP Resent Successfully',
     });
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message });
