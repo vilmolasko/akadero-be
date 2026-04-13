@@ -1,7 +1,7 @@
 // const nodemailer = require("nodemailer");
-const path = require("path");
-const fs = require("fs");
-const nodemailer = require("nodemailer");
+const path = require('path');
+const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 /*  Create Inquiry and Send Email to Organizer */
 const createRegistration = async (req, res) => {
@@ -10,10 +10,10 @@ const createRegistration = async (req, res) => {
 
     const htmlFilePath = path.join(
       process.cwd(),
-      "src/email-templates",
-      "registeration.html"
+      'src/email-templates',
+      'registeration.html',
     );
-    let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
     htmlContent = htmlContent
       .replace(/{{plan}}/g, plan)
       .replace(/{{email}}/g, email)
@@ -21,7 +21,8 @@ const createRegistration = async (req, res) => {
       .replace(/{{description}}/g, description)
       .replace(/{{phone}}/g, phone);
     let transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -37,10 +38,10 @@ const createRegistration = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Registeration submitted ",
+      message: 'Registeration submitted ',
     });
   } catch (error) {
-    console.error("Registeration Error:", error);
+    console.error('Registeration Error:', error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

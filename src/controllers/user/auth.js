@@ -45,7 +45,7 @@ const signUp = async (req, res) => {
       const htmlFilePath = path.join(
         process.cwd(),
         'src/email-templates',
-        'otp.html'
+        'otp.html',
       );
       let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
 
@@ -55,7 +55,8 @@ const signUp = async (req, res) => {
         .replace(/{{\s*email\s*}}/g, user.email);
 
       let transporter = nodemailer.createTransport({
-        service: process.env.SMTP_SERVICE,
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASSWORD,
@@ -144,7 +145,7 @@ const signIn = async (req, res) => {
         {
           otp,
           lastOtpSentAt: new Date(),
-        }
+        },
       );
 
       return res.status(403).json({
@@ -158,7 +159,7 @@ const signIn = async (req, res) => {
     const token = jwt.sign(
       { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '7d' },
     );
 
     return res.status(200).json({
@@ -208,16 +209,17 @@ const forgetPassword = async (req, res) => {
     const htmlFilePath = path.join(
       process.cwd(),
       'src/email-templates',
-      'forget.html'
+      'forget.html',
     );
     let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
     htmlContent = htmlContent.replace(
       /href="javascript:void\(0\);"/g,
-      `href="${resetPasswordLink}"`
+      `href="${resetPasswordLink}"`,
     );
 
     let transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -365,14 +367,15 @@ const resendOtp = async (req, res) => {
     const htmlFilePath = path.join(
       process.cwd(),
       'src/email-templates',
-      'otp.html'
+      'otp.html',
     );
     let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
     htmlContent = htmlContent.replace(/<h1>[\s\d]*<\/h1>/g, `<h1>${otp}</h1>`);
     htmlContent = htmlContent.replace(/usingyourmail@gmail\.com/g, user.email);
 
     let transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,

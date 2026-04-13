@@ -1,8 +1,8 @@
-const Course = require("../../models/Course");
-const Organizer = require("../../models/Organizer");
-const nodemailer = require("nodemailer");
-const path = require("path");
-const fs = require("fs");
+const Course = require('../../models/Course');
+const Organizer = require('../../models/Organizer');
+const nodemailer = require('nodemailer');
+const path = require('path');
+const fs = require('fs');
 
 /*  Create Inquiry and Send Email to Organizer */
 const createCourseInquiry = async (req, res) => {
@@ -11,21 +11,21 @@ const createCourseInquiry = async (req, res) => {
     const { courseId } = req.params;
 
     const course = await Course.findById(courseId).populate({
-      path: "organizer",
-      select: "email",
+      path: 'organizer',
+      select: 'email',
     });
     if (!course) {
       return res
         .status(404)
-        .json({ success: false, message: "Course not found" });
+        .json({ success: false, message: 'Course not found' });
     }
 
     const htmlFilePath = path.join(
       process.cwd(),
-      "src/email-templates",
-      "inquiry.html"
+      'src/email-templates',
+      'inquiry.html',
     );
-    let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
 
     htmlContent = htmlContent
       .replace(/{{firstName}}/g, firstName)
@@ -33,10 +33,11 @@ const createCourseInquiry = async (req, res) => {
       .replace(/{{email}}/g, email)
       .replace(/{{phone}}/g, phone)
       .replace(/{{question}}/g, question)
-      .replace(/{{courseName}}/g, course.title || "Course");
+      .replace(/{{courseName}}/g, course.title || 'Course');
 
     let transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -52,10 +53,10 @@ const createCourseInquiry = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Inquiry submitted ",
+      message: 'Inquiry submitted ',
     });
   } catch (error) {
-    console.error("Inquiry Error:", error);
+    console.error('Inquiry Error:', error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -70,15 +71,15 @@ const createOrganizerInquiry = async (req, res) => {
     if (!organizer) {
       return res
         .status(404)
-        .json({ success: false, message: "Organizer not found" });
+        .json({ success: false, message: 'Organizer not found' });
     }
 
     const htmlFilePath = path.join(
       process.cwd(),
-      "src/email-templates",
-      "inquiry.html"
+      'src/email-templates',
+      'inquiry.html',
     );
-    let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
 
     htmlContent = htmlContent
       .replace(/{{firstName}}/g, firstName)
@@ -86,10 +87,11 @@ const createOrganizerInquiry = async (req, res) => {
       .replace(/{{email}}/g, email)
       .replace(/{{phone}}/g, phone)
       .replace(/{{question}}/g, question)
-      .replace(/{{courseName}}/g, organizer.name || "Organizer");
+      .replace(/{{courseName}}/g, organizer.name || 'Organizer');
 
     let transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -106,10 +108,10 @@ const createOrganizerInquiry = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Inquiry submitted ",
+      message: 'Inquiry submitted ',
     });
   } catch (error) {
-    console.error("Inquiry Error:", error);
+    console.error('Inquiry Error:', error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
