@@ -27,13 +27,13 @@ const contactUs = async (req, res) => {
         pass: process.env.SMTP_PASSWORD,
       },
     });
-    to: (process.env.SENDING_EMAIL,
-      await transporter.sendMail({
-        from: process.env.SENDING_EMAIL,
-        to: process.env.SENDING_EMAIL,
-        subject: `Nauja žinutė iš kontaktų formos nuo ${name}`,
-        html: htmlContent,
-      }));
+
+    await transporter.sendMail({
+      from: process.env.SENDING_EMAIL,
+      to: 'kamstackpk@gmail.com',
+      subject: `Nauja žinutė iš kontaktų formos nuo ${name}`,
+      html: htmlContent,
+    });
 
     return res.status(201).json({
       success: true,
